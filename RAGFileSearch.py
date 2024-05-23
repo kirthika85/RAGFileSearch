@@ -1,4 +1,5 @@
 import streamlit as st
+import openai
 from langchain_openai import ChatOpenAI
 from langchain_community.document_loaders import TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
