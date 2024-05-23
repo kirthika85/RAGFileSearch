@@ -1,12 +1,24 @@
 import streamlit as st
-from langchain.llms import OpenAI
+
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_community.document_loaders import TextLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+# Useful to add documents to the chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
+
+# Useful to load the URL into documents
+from langchain_community.document_loaders import WebBaseLoader
+
+# Split the Web page into multiple chunks
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+# Create Embeddings
 from langchain_openai import OpenAIEmbeddings
-from langchain.vectorstores.faiss import FAISS
+
+# Vector Database FAISS
+from langchain_community.vectorstores.faiss import FAISS
+
+# USeful to create the Retrieval part
 from langchain.chains import create_retrieval_chain
 
 # Streamlit UI
