@@ -69,6 +69,7 @@ if st.button("Query Doc"):
                    split_docs = text_splitter.split_documents(docs)
                    vector_store = create_vector_store(split_docs)
                    chain = create_chain(vector_store)
+                   context = " ".join([doc.page_content for doc in split_docs])
                    response = chain.invoke({"context": split_docs, "question": user_question})                   
                    if 'answer' in response:
                          st.write("### Answer")
