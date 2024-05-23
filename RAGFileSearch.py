@@ -28,16 +28,15 @@ openai_api_key = st.sidebar.text_input('OpenAI API Key', type='password')
 if not openai_api_key.startswith('sk-'):
    st.warning('Please enter your OpenAI API key!', icon='⚠')
 if openai_api_key.startswith('sk-'):
-    uploaded_files=st.file_uploader("Upload text files", type=["txt"], accept_multiple_files=True)
+    uploaded_files=st.file_uploader("Upload text files", type=["txt"], accept_multiple_files=False)
     user_question=st.text_input("Enter your question:")
 
-    def get_docs_from_files(file_list):
-        docs = []
+    def get_docs_from_files(uploaded_file):
         for uploaded_file in file_list:
             with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
                 tmp_file.write(uploaded_file.read())
                 tmp_file_path = tmp_file.name
-        # Load the document using TextLoader
+            # Load the document using TextLoader
             loader = TextLoader(tmp_file_path)
             docs.extend(loader.load())
         text_splitter = RecursiveCharacterTextSplitter(
@@ -72,13 +71,11 @@ if st.button("Query Doc"):
         with st.spinner("Processing..."):
            try:
                docs = []
-               if uploaded_files:
-                   docs.extend(get_docs_from_files(uploaded_files))
-                   split_docs = text_splitter.split_documents(docs)
+               if uploaded_file:
+                   split_docs = get_docs_from_files(uploaded_file)
                    vector_store = create_vector_store(split_docs)
                    chain = create_chain(vector_store)
                    st.write("### Debugging Info")
-                   st.write(f"Context: {context}")
                    st.write(f"Question: {user_question}")
                    response = chain.invoke({"input":user_question})   
                    st.write("### Full Response")
