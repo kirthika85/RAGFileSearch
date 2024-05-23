@@ -1,6 +1,5 @@
 import streamlit as st
-
-import openai
+from langchain.llms import OpenAI
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.document_loaders import TextLoader
