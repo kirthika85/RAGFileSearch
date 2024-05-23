@@ -70,10 +70,11 @@ if st.button("Query Doc"):
                    vector_store = create_vector_store(split_docs)
                    chain = create_chain(vector_store)
                    context = " ".join([doc.page_content for doc in split_docs])
+                   inputs = {"context": context, "question": user_question}
                    st.write("### Debugging Info")
                    st.write(f"Context: {context}")
                    st.write(f"Question: {user_question}")
-                   response = chain.invoke({"context": split_docs, "question": user_question})   
+                   response = chain.invoke(inputs)   
                    st.write("### Full Response")
                    st.write(response)
                    if 'answer' in response:
