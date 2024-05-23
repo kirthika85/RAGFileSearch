@@ -70,7 +70,7 @@ if openai_api_key.startswith('sk-'):
     if st.button("Query Doc"):
        if uploaded_file and user_question:
            with st.spinner("Processing..."):
-           try:
+              try:
                   split_docs = get_docs_from_file(uploaded_file)
                   vector_store = create_vector_store(split_docs)
                   chain = create_chain(vector_store)
@@ -85,7 +85,7 @@ if openai_api_key.startswith('sk-'):
                   if 'answer' in response:
                       st.write("### Answer")
                       st.write(response['answer'])
-           except Exception as e:
+              except Exception as e:
                   st.error(f"An error occurred: {e}")
 else:
     st.warning("Please enter your OpenAI API Key")
