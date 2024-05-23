@@ -71,20 +71,20 @@ if openai_api_key.startswith('sk-'):
        if uploaded_file and user_question:
            with st.spinner("Processing..."):
            try:
-               split_docs = get_docs_from_file(uploaded_file)
-               vector_store = create_vector_store(split_docs)
-               chain = create_chain(vector_store)
+                  split_docs = get_docs_from_file(uploaded_file)
+                  vector_store = create_vector_store(split_docs)
+                  chain = create_chain(vector_store)
 
-               context = " ".join([doc.page_content for doc in split_docs])
-               st.write("### Debugging Info")
-               st.write(f"Context: {context}")
-               st.write(f"Question: {user_question}")
-               response = chain.invoke({"context": context, "input": user_question})
-               st.write("### Full Response")
-               st.write(response)
-               if 'answer' in response:
-                   st.write("### Answer")
-                   st.write(response['answer'])
+                  context = " ".join([doc.page_content for doc in split_docs])
+                  st.write("### Debugging Info")
+                  st.write(f"Context: {context}")
+                  st.write(f"Question: {user_question}")
+                  response = chain.invoke({"context": context, "input": user_question})
+                  st.write("### Full Response")
+                  st.write(response)
+                  if 'answer' in response:
+                      st.write("### Answer")
+                      st.write(response['answer'])
            except Exception as e:
                   st.error(f"An error occurred: {e}")
 else:
