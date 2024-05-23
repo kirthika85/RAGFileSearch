@@ -28,7 +28,7 @@ openai_api_key = st.sidebar.text_input('OpenAI API Key', type='password')
 if not openai_api_key.startswith('sk-'):
    st.warning('Please enter your OpenAI API key!', icon='⚠')
 if openai_api_key.startswith('sk-'):
-    uploaded_file=st.file_uploader("Upload text files", type=["txt"], accept_multiple_files=False)
+    uploaded_file=st.file_uploader("Upload text files", type=["txt", "pdf"], accept_multiple_files=False)
     user_question=st.text_input("Enter your question:")
 
     def get_docs_from_file(uploaded_file):
