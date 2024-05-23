@@ -40,23 +40,32 @@ if openai_api_key.startswith('sk-'):
         # Load the document using TextLoader
             loader = TextLoader(tmp_file_path)
             docs.extend(loader.load())
-        return docs
-       
+        text_splitter = RecursiveCharacterTextSplitter(
+                 chunk_size=200,
+                 chunk_overlap=20
+        )   
+        splitDocs = text_splitter.split_documents(docs)
+        return splitDocs
+               
     def create_vector_store(docs):
         embedding = OpenAIEmbeddings(api_key=openai_api_key)
         vector_store = FAISS.from_documents(docs, embedding=embedding)
         return vector_store
 
     def create_chain(vector_store):
-        model = ChatOpenAI(api_key=openai_api_key, model_name="gpt-3.5-turbo")
-        prompt_template = ChatPromptTemplate(
-            template="Given the following context and question, provide a relevant answer.\n\nContext: {context}\n\nQuestion: {question}",
-            input_variables=["context", "question"]
-        )
-        document_chain = create_stuff_documents_chain(llm=model,prompt=prompt_template)
-        retriever = vector_store.as_retriever(search_kwargs={"k": 1})
+        model = ChatOpenAI(api_key=openai_api_key,temperature=0.4,model='gpt-3.5-turbo-1106')
+        prompt = ChatPromptTemplate.from_template("""
+             Answer the user's question.
+             Context: {context}
+             Question: {input}
+              """)
+        print(prompt)
+        document_chain = create_stuff_documents_chain(llm=model,prompt=prompt)
+        # Retrieving the top 1 relevant document from the vector store , We can change k to 2 and get top 2 and so on
+        retriever = vectorStore.as_retriever(search_kwargs={"k": 5})
         retrieval_chain = create_retrieval_chain(retriever, document_chain)
         return retrieval_chain
+
 
 if st.button("Query Doc"):
     if uploaded_files and user_question:
@@ -65,16 +74,13 @@ if st.button("Query Doc"):
                docs = []
                if uploaded_files:
                    docs.extend(get_docs_from_files(uploaded_files))
-                   text_splitter = RecursiveCharacterTextSplitter(chunk_size=200, chunk_overlap=20)
                    split_docs = text_splitter.split_documents(docs)
                    vector_store = create_vector_store(split_docs)
                    chain = create_chain(vector_store)
-                   context = " ".join([doc.page_content for doc in split_docs])
-                   inputs = {"context": context, "question": user_question}
                    st.write("### Debugging Info")
                    st.write(f"Context: {context}")
                    st.write(f"Question: {user_question}")
-                   response = chain.invoke(inputs)   
+                   response = chain.invoke({"input":user_question})   
                    st.write("### Full Response")
                    st.write(response)
                    if 'answer' in response:
