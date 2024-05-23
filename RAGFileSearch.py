@@ -50,6 +50,7 @@ if openai_api_key.startswith('sk-'):
         retrieval_chain = create_retrieval_chain(retriever, document_chain)
         return retrieval_chain
 
+if st.button("Query Doc"):
     if uploaded_files and user_question:
         with st.spinner("Processing..."):
             docs = []
@@ -65,5 +66,5 @@ if openai_api_key.startswith('sk-'):
             if 'answer' in response:
                    st.write("### Answer")
                    st.write(response['answer'])                  
-    else:
-           st.warning("Please enter your OpenAI API Key")
+else:
+    st.warning("Please enter your OpenAI API Key")
