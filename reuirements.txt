@@ -11,3 +11,4 @@ scikit-learn
 pandas
 langchain_text_splitters
 beautifulsoup4
+langchain.llms 
