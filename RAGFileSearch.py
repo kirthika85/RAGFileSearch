@@ -34,8 +34,8 @@ if openai_api_key.startswith('sk-'):
        docs = []
        for uploaded_file in file_list:
            content = uploaded_file.read().decode("utf-8")
-            loader = TextLoader.from_text(content)
-            docs.extend(loader.load())
+           loader = TextLoader.from_text(content)
+           docs.extend(loader.load())
        return docs
        
     def create_vector_store(docs):
