@@ -1,5 +1,5 @@
 import streamlit as st
-import openai
+from langchain_openai import ChatOpenAI
 from langchain_community.document_loaders import WebBaseLoader, TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
@@ -31,7 +31,7 @@ if openai_api_key.startswith('sk-'):
         return vector_store
 
     def create_chain(vector_store):
-        model = OpenAI(api_key=openai_api_key, model_name="gpt-3.5-turbo")
+        model = ChatOpenAI(api_key=openai_api_key, model_name="gpt-3.5-turbo")
         document_chain = create_stuff_documents_chain(llm=model)
         retriever = vector_store.as_retriever(search_kwargs={"k": 1})
         retrieval_chain = create_retrieval_chain(retriever, document_chain)
