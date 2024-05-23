@@ -6,7 +6,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains.combine_documents import create_stuff_documents_chain
 
 # Useful to load the URL into documents
-from langchain_community.document_loaders import WebBaseLoader
+from langchain_community.document_loaders import TextLoader
 
 # Split the Web page into multiple chunks
 from langchain.text_splitter import RecursiveCharacterTextSplitter
