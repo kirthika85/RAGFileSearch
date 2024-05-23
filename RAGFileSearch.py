@@ -76,12 +76,11 @@ if openai_api_key.startswith('sk-'):
                   chain = create_chain(vector_store)
 
                   context = " ".join([doc.page_content for doc in split_docs])
-                  st.write("### Debugging Info")
-                  st.write(f"Context: {context}")
-                  st.write(f"Question: {user_question}")
+                  #st.write(f"Context: {context}")
+                  #st.write(f"Question: {user_question}")
                   response = chain.invoke({"context": context, "input": user_question})
-                  st.write("### Full Response")
-                  st.write(response)
+                  #st.write("### Full Response")
+                  #st.write(response)
                   if 'answer' in response:
                       st.write("### Answer")
                       st.write(response['answer'])
