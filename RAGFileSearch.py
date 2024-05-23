@@ -31,20 +31,22 @@ if openai_api_key.startswith('sk-'):
     uploaded_files=st.file_uploader("Upload text files", type=["txt"], accept_multiple_files=False)
     user_question=st.text_input("Enter your question:")
 
-    def get_docs_from_files(uploaded_file):
-        for uploaded_file in file_list:
-            with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
-                tmp_file.write(uploaded_file.read())
-                tmp_file_path = tmp_file.name
-            # Load the document using TextLoader
-            loader = TextLoader(tmp_file_path)
-            docs.extend(loader.load())
+    def get_docs_from_file(uploaded_file):
+        docs = []
+        with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
+             tmp_file.write(uploaded_file.read())
+             tmp_file_path = tmp_file.name
+        # Load the document using TextLoader
+        loader = TextLoader(tmp_file_path)
+        docs.extend(loader.load())
+    
+        # Split the document into chunks
         text_splitter = RecursiveCharacterTextSplitter(
-                 chunk_size=200,
-                 chunk_overlap=20
-        )   
-        splitDocs = text_splitter.split_documents(docs)
-        return splitDocs
+             chunk_size=200,
+             chunk_overlap=20
+        )
+        split_docs = text_splitter.split_documents(docs)
+        return split_docs
                
     def create_vector_store(docs):
         embedding = OpenAIEmbeddings(api_key=openai_api_key)
@@ -70,14 +72,16 @@ if st.button("Query Doc"):
     if uploaded_files and user_question:
         with st.spinner("Processing..."):
            try:
-               docs = []
                if uploaded_file:
-                   split_docs = get_docs_from_files(uploaded_file)
+                   split_docs = get_docs_from_file(uploaded_file)
                    vector_store = create_vector_store(split_docs)
                    chain = create_chain(vector_store)
+
+                   context = " ".join([doc.page_content for doc in split_docs])
                    st.write("### Debugging Info")
+                   st.write(f"Context: {context}")
                    st.write(f"Question: {user_question}")
-                   response = chain.invoke({"input":user_question})   
+                   response = chain.invoke({"context": context, "input": user_question})
                    st.write("### Full Response")
                    st.write(response)
                    if 'answer' in response:
