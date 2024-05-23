@@ -86,5 +86,5 @@ if openai_api_key.startswith('sk-'):
                       st.write(response['answer'])
               except Exception as e:
                   st.error(f"An error occurred: {e}")
-else:
-    st.warning("Please enter your OpenAI API Key")
+       else:
+          st.warning("Please enter your OpenAI API Key")
