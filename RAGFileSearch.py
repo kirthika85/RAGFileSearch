@@ -31,13 +31,13 @@ if openai_api_key.startswith('sk-'):
     user_question=st.text_input("Enter your question:")
 
     def get_docs_from_files(file_list):
-        docs = []
+       docs = []
         for uploaded_file in file_list:
             content = uploaded_file.read().decode("utf-8")
-            loader = TextLoader(content, source=uploaded_file.name)
+            loader = TextLoader.from_text(content)
             docs.extend(loader.load())
         return docs
-
+       
     def create_vector_store(docs):
         embedding = OpenAIEmbeddings(api_key=openai_api_key)
         vector_store = FAISS.from_documents(docs, embedding=embedding)
