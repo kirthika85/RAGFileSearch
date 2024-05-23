@@ -31,12 +31,15 @@ if openai_api_key.startswith('sk-'):
     user_question=st.text_input("Enter your question:")
 
     def get_docs_from_files(file_list):
-       docs = []
-       for uploaded_file in file_list:
-           content = uploaded_file.read().decode("utf-8")
-           loader = TextLoader.from_text(content)
-           docs.extend(loader.load())
-       return docs
+        docs = []
+        for uploaded_file in file_list:
+            with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
+                tmp_file.write(uploaded_file.read())
+                tmp_file_path = tmp_file.name
+        # Load the document using TextLoader
+            loader = TextLoader(tmp_file_path)
+            docs.extend(loader.load())
+        return docs
        
     def create_vector_store(docs):
         embedding = OpenAIEmbeddings(api_key=openai_api_key)
