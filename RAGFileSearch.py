@@ -49,7 +49,8 @@ if openai_api_key.startswith('sk-'):
 
     def create_chain(vector_store):
         model = ChatOpenAI(api_key=openai_api_key, model_name="gpt-3.5-turbo")
-        document_chain = create_stuff_documents_chain(llm=model)
+        prompt_template = ChatPromptTemplate.from_template("Your template here") 
+        document_chain = create_stuff_documents_chain(llm=model,prompt=prompt_template)
         retriever = vector_store.as_retriever(search_kwargs={"k": 1})
         retrieval_chain = create_retrieval_chain(retriever, document_chain)
         return retrieval_chain
