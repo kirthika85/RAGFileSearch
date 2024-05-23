@@ -53,18 +53,19 @@ if openai_api_key.startswith('sk-'):
 if st.button("Query Doc"):
     if uploaded_files and user_question:
         with st.spinner("Processing..."):
-            docs = []
-            if uploaded_files:
-                docs.extend(get_docs_from_files(uploaded_files))
-            
-            text_splitter = RecursiveCharacterTextSplitter(chunk_size=200, chunk_overlap=20)
-            split_docs = text_splitter.split_documents(docs)
-            
-            vector_store = create_vector_store(split_docs)
-            chain = create_chain(vector_store)
-            response = chain.invoke({"input": user_question})
-            if 'answer' in response:
-                   st.write("### Answer")
-                   st.write(response['answer'])                  
+           try:
+               docs = []
+               if uploaded_files:
+                   docs.extend(get_docs_from_files(uploaded_files))
+                   text_splitter = RecursiveCharacterTextSplitter(chunk_size=200, chunk_overlap=20)
+                   split_docs = text_splitter.split_documents(docs)
+                   vector_store = create_vector_store(split_docs)
+                   chain = create_chain(vector_store)
+                   response = chain.invoke({"input": user_question})
+                   if 'answer' in response:
+                         st.write("### Answer")
+                         st.write(response['answer'])
+           except Exception as e:
+                  st.error(f"An error occurred: {e}")
 else:
     st.warning("Please enter your OpenAI API Key")
