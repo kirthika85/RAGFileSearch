@@ -1,5 +1,4 @@
 import streamlit as st
-import langchain
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 
@@ -67,4 +66,4 @@ if openai_api_key.startswith('sk-'):
                    st.write("### Answer")
                    st.write(response['answer'])                  
     else:
-        st.warning("Please enter your OpenAI API Key")
+           st.warning("Please enter your OpenAI API Key")
