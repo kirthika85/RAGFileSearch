@@ -67,10 +67,9 @@ if openai_api_key.startswith('sk-'):
         retrieval_chain = create_retrieval_chain(retriever, document_chain)
         return retrieval_chain
 
-
-if st.button("Query Doc"):
-    if uploaded_file and user_question:
-        with st.spinner("Processing..."):
+    if st.button("Query Doc"):
+       if uploaded_file and user_question:
+           with st.spinner("Processing..."):
            try:
                split_docs = get_docs_from_file(uploaded_file)
                vector_store = create_vector_store(split_docs)
