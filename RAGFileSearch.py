@@ -50,7 +50,7 @@ if openai_api_key.startswith('sk-'):
         retrieval_chain = create_retrieval_chain(retriever, document_chain)
         return retrieval_chain
 
-    if (urls or uploaded_files) and user_question:
+    if (uploaded_files) and user_question:
         with st.spinner("Processing..."):
             docs = []
             if uploaded_files:
