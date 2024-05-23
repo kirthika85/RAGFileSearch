@@ -49,7 +49,7 @@ if openai_api_key.startswith('sk-'):
 
     def create_chain(vector_store):
         model = ChatOpenAI(api_key=openai_api_key, model_name="gpt-3.5-turbo")
-        prompt_template = ChatPromptTemplate.from_template(
+        prompt_template = ChatPromptTemplate(
             template="Given the following context and question, provide a relevant answer.\n\nContext: {context}\n\nQuestion: {question}",
             input_variables=["context", "question"]
         )
