@@ -1,10 +1,10 @@
 import streamlit as st
 from langchain_openai import ChatOpenAI
-from langchain_community.document_loaders import WebBaseLoader, TextLoader
+from langchain_community.document_loaders import TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.embeddings import OpenAIEmbeddings
+from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain_openai import OpenAIEmbeddings
 from langchain.vectorstores.faiss import FAISS
-from langchain.llms import OpenAI
 from langchain.chains import create_retrieval_chain
 
 # Streamlit UI
