@@ -28,7 +28,7 @@ openai_api_key = st.sidebar.text_input('OpenAI API Key', type='password')
 if not openai_api_key.startswith('sk-'):
    st.warning('Please enter your OpenAI API key!', icon='⚠')
 if openai_api_key.startswith('sk-'):
-    uploaded_files=st.file_uploader("Upload text files", type=["txt"], accept_multiple_files=False)
+    uploaded_file=st.file_uploader("Upload text files", type=["txt"], accept_multiple_files=False)
     user_question=st.text_input("Enter your question:")
 
     def get_docs_from_file(uploaded_file):
@@ -69,24 +69,23 @@ if openai_api_key.startswith('sk-'):
 
 
 if st.button("Query Doc"):
-    if uploaded_files and user_question:
+    if uploaded_file and user_question:
         with st.spinner("Processing..."):
            try:
-               if uploaded_file:
-                   split_docs = get_docs_from_file(uploaded_file)
-                   vector_store = create_vector_store(split_docs)
-                   chain = create_chain(vector_store)
+               split_docs = get_docs_from_file(uploaded_file)
+               vector_store = create_vector_store(split_docs)
+               chain = create_chain(vector_store)
 
-                   context = " ".join([doc.page_content for doc in split_docs])
-                   st.write("### Debugging Info")
-                   st.write(f"Context: {context}")
-                   st.write(f"Question: {user_question}")
-                   response = chain.invoke({"context": context, "input": user_question})
-                   st.write("### Full Response")
-                   st.write(response)
-                   if 'answer' in response:
-                         st.write("### Answer")
-                         st.write(response['answer'])
+               context = " ".join([doc.page_content for doc in split_docs])
+               st.write("### Debugging Info")
+               st.write(f"Context: {context}")
+               st.write(f"Question: {user_question}")
+               response = chain.invoke({"context": context, "input": user_question})
+               st.write("### Full Response")
+               st.write(response)
+               if 'answer' in response:
+                   st.write("### Answer")
+                   st.write(response['answer'])
            except Exception as e:
                   st.error(f"An error occurred: {e}")
 else:
